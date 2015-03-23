@@ -1,49 +1,14 @@
-#/usr/bin/env ruby
-# #gnudism on irc.freenode.net
-
-require 'cinch'
+require_relative 'gnudism_bot'
 require_relative 'vars'
+require 'cinch'
 
-# building off of:
-# https://github.com/cinchrb/cinch (thanks dog)
+class GnudismBot
 
-# Give this bot ops in a channel and it'll auto voice
-# visitors
-#
-# Enable with !autovoice on
-# Disable with !autovoice off
-#
-# It starts out disabled.
-bot = Cinch::Bot.new do
-  configure do |c|
-    c.nick = USERNAME
-    c.server = "irc.freenode.org"
-    c.verbose = true
-    c.channels = ["#gnudism"]
+  def create_connection(conn_info)
+    # create connection to irc.freenode.net
+    bot = Cinch::Bot.new
+
   end
 
-  # auto voice
-  on :join do |m|
-    unless m.user.nick == bot.nick # We shouldn't attempt to voice ourselves
-      m.channel.voice(m.user) if @autovoice
-    end
-  end
-
-  # turn on autovoice
-  on :channel, /^!autovoice (on|off)$/ do |m, option|
-    @autovoice = option == "on"
-    m.reply "Autovoice is now #{@autovoice ? 'enabled' : 'disabled'}"
-  end
-
-  # auto op user
-  on :join do |op|
-    if op.user.nick == "" # We shouldn't attempt to voice ourselves
-      op.channel.voice(op.user) if @autoop
-    end
-  end
-  on :channel, /^!autoop (on|off)$/ do |m, option|
-    @autoop = option == "on"
-    m.reply "Owner op is now #{@autoop ? 'enabled' : 'disabled'}"
-  end
 end
-bot.start
+
